@@ -8,8 +8,8 @@ As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the app
 | --------------------------------------------------- | ------------------ | ----------------- | ------------ |
 | View home page                                      | home.jsx           | None              | None         |
 | Register new user<br/>(t@jwt.com, pw: test)         | register.tsx       | [PUT] /api/auth   |INSERT INTO user (name, email, password VALUES (?, ?, ?) INSERT INTO userRole (userId, role, objectId) VALUES (?, ?, ?)              |
-| Order pizza                                         |                    |                   |              |
-| Verify pizza                                        |                    |                   |              |
+| Order pizza                                         |menu.tsx            |[GET] /api/ordermenu [GET] /api/franchise| SELECT * FROM menu SELECT id, name FROM franchise SELECT id, name FROM store WHERE franchiseId=?             |
+| Verify pizza                                        |delivery            | [POST] /api/order/verify| INSERT INTO dinerOrder (dinerId, franchiseId, storeId, date) VALUES (?, ?, ?, now()) INSERT INTO orderItem (orderId, menuId, description, price) VALUES (?, ?, ?, ?)             |
 | View profile page                                   |                    |                   |              |
 | View franchise<br/>(as diner)                       |                    |                   |              |
 | Logout                                              |                    |                   |              |
