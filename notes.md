@@ -7,10 +7,10 @@ As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the app
 | User activity                                       | Frontend component | Backend endpoints | Database SQL |
 | --------------------------------------------------- | ------------------ | ----------------- | ------------ |
 | View home page                                      | home.jsx           | None              | None         |
-| Register new user<br/>(t@jwt.com, pw: test)         | register.tsx       | [PUT] /api/auth   |INSERT INTO user (name, email, password VALUES (?, ?, ?) INSERT INTO userRole (userId, role, objectId) VALUES (?, ?, ?)              |
+| Register new user<br/>(t@jwt.com, pw: test)         | register.tsx       | [PUT] /api/auth   |INSERT INTO user (name, email, password VALUES (?, ?, ?)) INSERT INTO userRole (userId, role, objectId) VALUES (?, ?, ?)              |
 | Order pizza                                         |menu.tsx            |[GET] /api/ordermenu [GET] /api/franchise| SELECT * FROM menu SELECT id, name FROM franchise SELECT id, name FROM store WHERE franchiseId=?             |
 | Verify pizza                                        |delivery            | [POST] /api/order/verify| INSERT INTO dinerOrder (dinerId, franchiseId, storeId, date) VALUES (?, ?, ?, now()) INSERT INTO orderItem (orderId, menuId, description, price) VALUES (?, ?, ?, ?)             |
-| View profile page                                   |dinerDashboard.tsx      |[GET] api/order    |`SELECT id, franchiseId, storeId, date FROM dinerOrder WHERE dinerId=? LIMIT ${offset},${config.db.listPerPage}` `SELECT id, menuId, description, price FROM orderItem WHERE orderId=?`             |
+| View profile page                                   |dinerDashboard.tsx      |[GET] api/order    |SELECT id, franchiseId, storeId, date FROM dinerOrder WHERE dinerId=? LIMIT ${offset},${config.db.listPerPage}` `SELECT id, menuId, description, price FROM orderItem WHERE orderId=?             |
 | View franchise<br/>(as diner)                       |franchiseDashboard.tsx|  None                 |   None           |
 | Logout                                              | logout.jsx         |  [DELETE] /api/auth| DELETE FROM auth WHERE token=?             |
 | View About page                                     |about.tsx           | None              | None         |
