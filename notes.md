@@ -10,9 +10,9 @@ As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the app
 | Register new user<br/>(t@jwt.com, pw: test)         | register.tsx       | [PUT] /api/auth   |INSERT INTO user (name, email, password VALUES (?, ?, ?) INSERT INTO userRole (userId, role, objectId) VALUES (?, ?, ?)              |
 | Order pizza                                         |menu.tsx            |[GET] /api/ordermenu [GET] /api/franchise| SELECT * FROM menu SELECT id, name FROM franchise SELECT id, name FROM store WHERE franchiseId=?             |
 | Verify pizza                                        |delivery            | [POST] /api/order/verify| INSERT INTO dinerOrder (dinerId, franchiseId, storeId, date) VALUES (?, ?, ?, now()) INSERT INTO orderItem (orderId, menuId, description, price) VALUES (?, ?, ?, ?)             |
-| View profile page                                   |                    |                   |              |
-| View franchise<br/>(as diner)                       |                    |                   |              |
-| Logout                                              |                    |                   |              |
+| View profile page                                   |dinerDashboard.tsx      |[GET] api/order    |`SELECT id, franchiseId, storeId, date FROM dinerOrder WHERE dinerId=? LIMIT ${offset},${config.db.listPerPage}` `SELECT id, menuId, description, price FROM orderItem WHERE orderId=?`             |
+| View franchise<br/>(as diner)                       |franchiseDashboard.tsx|  None                 |   None           |
+| Logout                                              | logout.jsx         |  [DELETE] /api/auth| DELETE FROM auth WHERE token=?             |
 | View About page                                     |                    |                   |              |
 | View History page                                   |                    |                   |              |
 | Login as franchisee<br/>(f@jwt.com, pw: franchisee) |                    |                   |              |
