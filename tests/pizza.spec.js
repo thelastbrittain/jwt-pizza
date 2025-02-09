@@ -62,7 +62,7 @@ test('purchase with login', async ({ page }) => {
     await route.fulfill({ json: orderRes });
   });
 
-  await page.goto('http://localhost:5173/');
+  await page.goto('http://localhost:5173');
 
   // Go to order page
   await page.getByRole('button', { name: 'Order now' }).click();
@@ -92,3 +92,85 @@ test('purchase with login', async ({ page }) => {
   // Check balance
   await expect(page.getByText('0.008')).toBeVisible();
 });
+
+
+test('about and history pages', async ({ page }) => {
+  await page.goto('http://localhost:5173/');
+  
+  await page.getByRole('link', { name: 'About' }).click();
+  await expect(page.getByRole('main')).toContainText('The secret sauce');
+  await expect(page.getByRole('main')).toContainText('Our talented employees at JWT Pizza are true artisans. They pour their heart and soul into every pizza they create, striving for perfection in every aspect. From hand-stretching the dough to carefully layering the toppings, they take pride in their work and are constantly seeking ways to elevate the pizza-making process. Their creativity and expertise shine through in every slice, resulting in a pizza that is not only delicious but also a work of art. We are grateful for our dedicated team and their unwavering commitment to delivering the most flavorful and satisfying pizzas to our valued customers.');
+  await page.getByRole('link', { name: 'History' }).click();
+  await expect(page.getByRole('heading')).toContainText('Mama Rucci, my my');
+  await expect(page.getByRole('main')).toContainText('However, it was the Romans who truly popularized pizza-like dishes. They would top their flatbreads with various ingredients such as cheese, honey, and bay leaves.');
+});
+
+
+test('register', async ({ page }) => {
+
+  await page.route('*/**/api/auth', async (route) => {
+    const requestMethod = route.request().method();
+
+    if (requestMethod === 'POST') {
+      // Mock response for registration
+      const regResult = {
+        "user": {
+          "name": "testR@test.com",
+          "email": "r@test.com",
+          "roles": [
+            {
+              "role": "diner"
+            }
+          ],
+          "id": 512
+        },
+        "token": "123"
+      };
+      await route.fulfill({ json: regResult });
+    } else if (requestMethod === 'DELETE') {
+      // Mock response for logout
+      const logoutResult = {
+        "message": "logout successful"
+      };
+      await route.fulfill({ json: logoutResult });
+    } else {
+      // Allow other requests to proceed unmocked
+      await route.continue();
+    }
+  });
+  
+  // register
+  await page.goto('http://localhost:5173/');
+  await page.getByRole('link', { name: 'Register' }).click();
+  await expect(page.getByRole('heading')).toContainText('Welcome to the party');
+  await page.getByRole('textbox', { name: 'Full name' }).fill('testR@test.com');
+  await page.getByRole('textbox', { name: 'Full name' }).press('Tab');
+  await page.getByRole('textbox', { name: 'Email address' }).fill('r@test.com');
+  await page.getByRole('textbox', { name: 'Email address' }).press('Tab');
+  await page.getByRole('textbox', { name: 'Password' }).fill('r');
+  await expect(page.getByRole('textbox', { name: 'Full name' })).toHaveValue('testR@test.com');
+  await page.getByRole('textbox', { name: 'Email address' }).click();
+  await page.getByRole('textbox', { name: 'Password' }).click();
+  await expect(page.getByRole('textbox', { name: 'Email address' })).toHaveValue('r@test.com');
+  await expect(page.getByRole('textbox', { name: 'Password' })).toHaveValue('r');
+  await page.getByRole('button', { name: 'Register' }).click();
+
+  // after register
+  await expect(page.getByRole('heading')).toContainText('The web\'s best pizza');
+
+  // logout
+  await page.getByRole('link', { name: 'Logout' }).click();
+  await expect(page.getByRole('heading')).toContainText('The web\'s best pizza');
+
+});
+
+// test franchisee see franchises
+// test('register', async ({ page }) => {
+//   // login
+//   // go to dashboard
+//   // create store
+
+
+// });
+
+// test admin create/delete franchise
