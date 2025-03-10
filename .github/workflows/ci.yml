@@ -51,10 +51,11 @@ jobs:
     permissions:
       id-token: write
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://pizza.byucsstudent.click
     env:
       version: ${{needs.build.outputs.version}}
-      name: production
-      url: https://pizza.pryamidlogging.click
     steps:
       - name: Create OIDC token to AWS
         uses: aws-actions/configure-aws-credentials@v4
