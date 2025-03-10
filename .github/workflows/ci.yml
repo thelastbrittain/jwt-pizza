@@ -53,6 +53,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       version: ${{needs.build.outputs.version}}
+      name: production
+      url: https://pizza.byucsstudent.click
     steps:
       - name: Create OIDC token to AWS
         uses: aws-actions/configure-aws-credentials@v4
@@ -91,11 +93,3 @@ jobs:
             ${{ github.event.head_commit.message }}
 
             **commit**: ${{ github.sha }}
-  deploy:
-    needs: build
-    permissions:
-      id-token: write
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://pizza.byucsstudent.click
